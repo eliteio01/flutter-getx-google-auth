@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_google_auth/controller/auth_controller.dart';
+import 'package:getx_google_auth/service/auth_services.dart';
 import 'package:getx_google_auth/views/signup_view.dart';
 import 'package:getx_google_auth/widgets/auth/auth_elevated_btn_icon.dart';
 import 'package:getx_google_auth/widgets/auth/auth_gradient_btn.dart';
@@ -16,6 +18,8 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   TextEditingController passwordController = TextEditingController();
+  final AuthServices authServices = AuthServices();
+  final AuthController authController = Get.find<AuthController>();
 
   bool obscureText = true;
   TextInputType keyboardType = TextInputType.text;
@@ -23,6 +27,14 @@ class _LoginViewState extends State<LoginView> {
     setState(() {
       obscureText = !obscureText;
     });
+  }
+
+  Future<void> googleLogin() async {
+    final user = await authServices.signInWithGoogle();
+    if (user != null) {
+      final idToken = await user.getIdToken(true);
+      await authController.loginWithGoogle(idToken!);
+    }
   }
 
   @override
@@ -241,7 +253,7 @@ class _LoginViewState extends State<LoginView> {
                                 size: 25,
                               ),
                               onPressed: () {
-                                // Handle button press
+                                googleLogin();
                               },
                               brandColorText: Colors.black,
                             ),
@@ -264,6 +276,14 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
             ),
+            Obx(() {
+              if (authController.isLoading.value) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return const SizedBox();
+            }),
           ],
         ),
       ),

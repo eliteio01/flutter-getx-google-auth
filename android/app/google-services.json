@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "899449196076",
+    "project_id": "getx-auth-app-807e9",
+    "storage_bucket": "getx-auth-app-807e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899449196076:android:88dee8c608885663a40b89",
+        "android_client_info": {
+          "package_name": "com.eliteauth.getx_google_auth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKRy9dDo0N08l0l5UsKQzOOxBl50-j_dE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

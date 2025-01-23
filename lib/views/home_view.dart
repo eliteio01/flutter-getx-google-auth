@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:getx_google_auth/service/auth_services.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -13,6 +15,32 @@ var name = arguments['name'];
 var email = arguments['email'];
 
 class _HomeViewState extends State<HomeView> {
+  final SecureStorage = const FlutterSecureStorage();
+  final AuthServices authServices = AuthServices();
+  String name = '';
+  String email = '';
+  @override
+  void initState() {
+    loadUserDate();
+    super.initState();
+  }
+
+  Future<void> loadUserDate() async {
+    final storedName = await SecureStorage.read(key: 'name');
+    final storedEmail = await SecureStorage.read(key: 'email');
+
+    setState(() {
+      name = storedName!;
+      email = storedEmail!;
+    });
+  }
+
+  Future<void> _logout() async {
+    await authServices.signOut();
+    await SecureStorage.deleteAll();
+    Get.offAllNamed('/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +78,7 @@ class _HomeViewState extends State<HomeView> {
               // Logout button
               ElevatedButton(
                 onPressed: () {
-                  Get.back(); // Navigates back to the login screen.
+                  _logout();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
